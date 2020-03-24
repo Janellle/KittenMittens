@@ -25,11 +25,15 @@ app.get("/cart", function(req,res){
     res.render("cart");
 });
 
+app.get("/admin", function(req,res){
+    res.render("admin");
+});
+
 /*
 app.get("/cart", async function(req, res){
     let rows = await getCartShoes();
-    //let rowsSecond = await getCartNonPlanets();
-    //res.render("cart", {"cartPlanets":rows, "cartNonPlanets":rowsSecond});
+    //let rowsSecond = await getCartNonPlanets(); EXAMPLE
+    //res.render("cart", {"cartPlanets":rows, "cartNonPlanets":rowsSecond}); EXAMPLE
     res.render("cart", {"cartShoes":rows})
 });
 
