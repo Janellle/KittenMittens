@@ -21,8 +21,16 @@ app.get("/search", async function(req, res){
     res.render("search");
 }); // search
 
-app.get("/cart", function(req,res){
+app.get("/cart", async function(req,res){
     res.render("cart");
+});
+
+app.get("/productPage", async function(req,res){
+    res.render("productPage");
+});
+
+app.get("/productView", async function(req,res){
+    res.render("productView");
 });
 
 /*
