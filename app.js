@@ -5,12 +5,11 @@ const {Client} = require('pg');
 //const session = require('express-session');
 
 app.set("view engine", "ejs");
-app.engine('html', require('ejs').renderFile);
 app.use(express.static("public")); //folder for images, css, js
 app.use(express.urlencoded()); //use to parse data sent using the POST method
 
 app.get("/", async function(req, res){
-    res.render("index.ejs");
+    res.render("index");
 }); //root
 
 app.get("/login", async function(req, res){
