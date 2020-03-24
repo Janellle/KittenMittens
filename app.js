@@ -10,7 +10,7 @@ app.use(express.static("public")); //folder for images, css, js
 app.use(express.urlencoded()); //use to parse data sent using the POST method
 
 app.get("/", async function(req, res){
-    res.render("index.html");
+    res.render("index.ejs");
 }); //root
 
 app.get("/login", async function(req, res){
