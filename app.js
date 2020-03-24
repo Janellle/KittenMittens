@@ -25,27 +25,25 @@ app.get("/cart", async function(req,res){
     res.render("cart");
 });
 
-<<<<<<< HEAD
-app.get("/admin", function(req,res){
-    res.render("admin");
-=======
 app.get("/productPage", async function(req,res){
     res.render("productPage");
 });
 
 app.get("/productView", async function(req,res){
     res.render("productView");
->>>>>>> 81f9f86acd96f02b3cff8b6421308ac82b4e5435
+});
+
+app.get("/admin", async function(req,res){
+    res.render("admin");
 });
 
 /*
 app.get("/cart", async function(req, res){
     let rows = await getCartShoes();
-    //let rowsSecond = await getCartNonPlanets(); EXAMPLE
-    //res.render("cart", {"cartPlanets":rows, "cartNonPlanets":rowsSecond}); EXAMPLE
+    //let rowsSecond = await getCartNonPlanets();
+    //res.render("cart", {"cartPlanets":rows, "cartNonPlanets":rowsSecond});
     res.render("cart", {"cartShoes":rows})
 });
-
 app.get("/clearCart", async function(req, res){
     clearCart();
     let rows = await getCartShoes();
