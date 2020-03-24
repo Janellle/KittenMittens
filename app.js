@@ -21,12 +21,21 @@ app.get("/search", async function(req, res){
     res.render("search");
 }); // search
 
-app.get("/cart", function(req,res){
+app.get("/cart", async function(req,res){
     res.render("cart");
 });
 
+<<<<<<< HEAD
 app.get("/admin", function(req,res){
     res.render("admin");
+=======
+app.get("/productPage", async function(req,res){
+    res.render("productPage");
+});
+
+app.get("/productView", async function(req,res){
+    res.render("productView");
+>>>>>>> 81f9f86acd96f02b3cff8b6421308ac82b4e5435
 });
 
 /*
