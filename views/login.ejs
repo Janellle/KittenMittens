@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%- include('partials/header.ejs') %>
         <body>
     <div id="login">
@@ -27,8 +28,84 @@
                     </div>
                 </div>
             </div>
+=======
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Admin Login Screen </title>
+        
+        <link href="/css/styles.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">        
+        
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <script>
+                $(document).ready(function() {
+                
+                
+                    $("#loginBtn").on("click", function(){
+                        
+                        //alert("works!");
+                        
+                        $.ajax({
+                        
+                              method: "POST",
+                                 url: "/loginProcess",
+                            dataType: "JSON",
+                                data: { "username":$("#username").val(),
+                                        "password":$("#password").val() },
+                             success: function(result,status) {
+                                //alert(result);
+                                if (!result) {
+                                    
+                                    alert("Wrong credentials!");
+                                    
+                                } else {
+                                    
+                                    location.href = "/admin"; //redirects to admin route
+                                    
+                                }
+                            }
+                            
+                        });//ajax
+                        
+                    });//click
+                
+                }); //document.ready
+        
+        </script>
+        
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="/">Kitten Mittens</a>
+  
+          <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/cart">Cart</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+          
+        <h1 class="text-center display-3"><strong><i>Login Form</i></strong></h1>        
+        
+        <div class="text-center">
+            <br>
+            Username: <input type="text" name="username" id="username" /><br>
+    
+            Password: <input type="password" id="password"><br>
+            <br>
+            
+            <button class="btn btn-primary" id="loginBtn">Login!</button>
+>>>>>>> origin/Janelle
         </div>
-    </div>
-</body>
+        
+        <link href="/css/styles.css" rel="stylesheet" />
     </body>
 </html>
