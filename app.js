@@ -13,6 +13,10 @@ app.get("/", async function(req, res){
     res.render("index");
 });//root
 
+app.get("/productPage", async function(req, res){
+    res.render("productPage");
+});
+
 app.get("/login", async function(req, res){
     res.render("login");
     
