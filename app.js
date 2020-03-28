@@ -10,8 +10,8 @@ app.use(express.urlencoded()); //use to parse data sent using the POST method
 app.use(session({ secret: 'any word', cookie: { maxAge: 60000 }}));
 
 app.get("/", async function(req, res){
-    let prodList = await getProdList(); 
-    res.render("index", {"prodList":prodList});  
+    let prodList = await getProdList();  
+    res.render("index", {"prodList":prodList});
 });//root
 
 app.get("/productPage", async function(req, res){
