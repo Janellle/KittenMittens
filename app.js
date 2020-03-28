@@ -269,7 +269,7 @@ function getProdList(){
            if (err) throw err;
            console.log("Connected!");
         
-           let sql = `SELECT name
+           let sql = `SELECT *
                         FROM inventory
                         ORDER BY name`;
         
