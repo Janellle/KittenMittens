@@ -1,30 +1,4 @@
 <%- include('partials/header.ejs') %>
-    <head>
-        <title> Kitten Mittens </title>
-        <link href="/css/styles.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">        
-        
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script>
-        function insertToCart(name, price){
-                $.ajax({
-                      method: "POST",
-                         url: "/addToCart",
-                    dataType: "JSON",
-                        data: { "prodName":name,
-                                "prodPrice":price},
-                     success: function(result,status) {
-                        alert(name + " has been added to your cart!");
-                    }
-                    
-                });//ajax
-        
-        } //document.ready
-        
-        </script>
-    </head>
-
           <!-- Page Content -->
   <div class="container">
 
@@ -32,17 +6,19 @@
 
       <div class="col-lg-3">
 
-        <h2 class="my-4">Kitten Mittens</h2>
-        <h4 class="text-primary">Protect the beans!</h4><br>
+        <h1 class="my-4">Shop Name</h1>
+        <div class="list-group">
+          <a href="#" class="list-group-item">Category 1</a>
+          <a href="#" class="list-group-item">Category 2</a>
+          <a href="#" class="list-group-item">Category 3</a>
+        </div>
 
       </div>
       <!-- /.col-lg-3 -->
 
       <div class="col-lg-9">
 
-        <div class="row">
-          
-          <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+        <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -53,10 +29,10 @@
               <img class="d-block img-fluid" src="https://images.footlocker.com/is/image/EBFL2/T3745046_a1?wid=900&hei=350&fmt=png-alpha" alt="First slide">
             </div>
             <div class="carousel-item">
-              <img class="d-block img-fluid" src="https://images.footlocker.com/is/image/EBFL2/PS10110T_a1?wid=940&amp;hei=350&amp;fmt=png-alpha" alt="Second slide">
+              <img class="d-block img-fluid" src="https://placehold.it/900x350" alt="Second slide">
             </div>
             <div class="carousel-item">
-              <img class="d-block img-fluid" src="https://images.footlocker.com/is/image/EBFL2/EE8799_a1?wid=940&amp;hei=350&amp;fmt=png-alpha" alt="Third slide">
+              <img class="d-block img-fluid" src="https://placehold.it/900x350" alt="Third slide">
             </div>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -68,24 +44,106 @@
             <span class="sr-only">Next</span>
           </a>
         </div>
-        
-          <br>
-          
-          <% prodList.forEach(function(product){  %>
-        <div class="col-lg-4 col-md-6 mb-4">
+
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <td><img class="rounded" src="<%=product.image%>" width="200px"/></td>
+              <a href="#"><img class="card-img-top" src="https://placehold.it/700x400" alt=""></a>
               <div class="card-body">
-                <h4 class="card-title text-primary">
-                  <td><%= product.name %></td>
+                <h4 class="card-title">
+                  <a href="#">Item One</a>
                 </h4>
-                 <td><%= product.price %></td>
-                 <td class="align-middle"><button class="btn btn-primary" onclick="insertToCart('<%=product.name%>','<%=product.price%>')">Add to Cart</button></td>
+                <h5>$24.99</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
             </div>
           </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="https://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item Two</a>
+                </h4>
+                <h5>$24.99</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
           </div>
-        <% }) %> 
-        
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="https://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item Three</a>
+                </h4>
+                <h5>$24.99</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="https://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item Four</a>
+                </h4>
+                <h5>$24.99</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="https://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item Five</a>
+                </h4>
+                <h5>$24.99</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="https://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item Six</a>
+                </h4>
+                <h5>$24.99</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+        </div>
         <!-- /.row -->
 
       </div>
@@ -96,6 +154,18 @@
 
   </div>
   <!-- /.container -->
-        
+       
+          <% prodList.forEach(function(product){  %>
+          <class id="grid-container">
+            <td><img class="rounded" src="<%=product.image%>" width="200px"/></td> <br>
+          <%= product.name %> <br>
+          <%= product.price %> <br>
+          [<a href="/updateProd?name=<%= product.name %>">UPDATE</a>]
+          [<a onclick="deleteConfirm()" class="removeProd" href="/deleteProd?name=<%= product.name %>">DELETE</a>] <br><br>
+          </class>
+        <% }) %>
+       
+       
     </body>
+       
 </html>
