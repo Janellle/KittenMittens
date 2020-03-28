@@ -1,0 +1,23 @@
+<%- include('partials/header.ejs') %>
+        <h1 class="text-center display-3"><strong><i> Updating Product </i></strong></h1>
+        
+        <br>
+        <form method="POST">
+            <input type="hidden" name="name" value="<%= prodInfo.name %>">
+            Name: <%= prodInfo.name %> (Non-changable)<br>    
+                        
+            Price: <input type="number" name="price" value="<%= prodInfo.price %>"><br>
+            Image URL: <input type="text" name="image"  value="<%= prodInfo.image %>"><br>
+            Quantity: <input type="text" name="quantity"  value="<%= prodInfo.quantity %>"><br>
+            Color: <input type="text" name="color"  value="<%= prodInfo.color %>"><br>
+            
+            <br><br>
+            <button class="btn btn-primary">Update Product</button><br>
+        
+            <%= typeof(message) != "undefined"?message:"" %>
+            
+        </form>        
+
+        <br><br>
+    </body>
+</html>

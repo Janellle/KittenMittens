@@ -1,0 +1,20 @@
+<%- include('partials/header.ejs') %>
+        <h1 class="text-center display-3"><strong><i> Adding New Product </i></strong></h1>
+
+        <form method="POST">
+        
+            Name: <input type="text" name="name"><br>    
+            Price: <input type="number" name="price"><br>
+            Image URL: <input type="text" name="image"><br>
+            Quantity: <input type="text" name="quantity"><br>
+            Color: <input type="text" name="color"><br>
+            <br><br>
+            <button class="btn btn-primary">Add Product</button><br>
+        
+            <%= typeof(message) != "undefined"?message:"" %>
+            
+        </form>        
+
+        <br><br>
+    </body>
+</html>

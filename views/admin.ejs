@@ -1,0 +1,32 @@
+<%- include('partials/header.ejs') %>
+      <h2 class="text-center display-3"><strong><i> Admin </i></strong></h1>
+      </div>
+      <br>
+      <div class="container" id="admin_css">      
+        <form action="/addProd">
+          <button class="btn btn-primary"> Add New Product </button>
+        </form>
+      <br>
+        <% prodList.forEach(function(product){  %>
+      
+          [<a href="/updateProd?name=<%= product.name %>">UPDATE</a>] 
+          [<a onclick="deleteConfirm()" class="removeProd" href="/deleteProd?name=<%= product.name %>">DELETE</a>] 
+          <%= product.name %> <br>
+          <%= product.price %> <br>
+        <% }) %>
+      </div>
+      </body>
+      <script>
+            $(document).ready(function() {
+                $("#logoutBtn").on("click", function(){
+                    location.href = "/logout"; //redirects to login route
+                });//click
+            }); //document.ready
+            
+            function deleteConfirm(){
+                 if (!confirm("Delete product?")) {
+                      event.preventDefault(); //prevents default behavior of the links
+                    }
+            }
+        </script>
+</html>
