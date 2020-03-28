@@ -8,11 +8,12 @@
         </form>
       <br>
         <% prodList.forEach(function(product){  %>
-      
-          [<a href="/updateProd?name=<%= product.name %>">UPDATE</a>] 
-          [<a onclick="deleteConfirm()" class="removeProd" href="/deleteProd?name=<%= product.name %>">DELETE</a>] 
+        
+          <td><img class="rounded" src="<%=product.image%>" width="200px"/></td> <br>
           <%= product.name %> <br>
           <%= product.price %> <br>
+          [<a href="/updateProd?name=<%= product.name %>">UPDATE</a>] 
+          [<a onclick="deleteConfirm()" class="removeProd" href="/deleteProd?name=<%= product.name %>">DELETE</a>] <br><br>
         <% }) %>
       </div>
       </body>
