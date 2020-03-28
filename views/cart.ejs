@@ -1,6 +1,8 @@
 <%- include('partials/header.ejs') %>
+    <br><br>
+    <h1 class="text-center display-3"><strong>Cart</strong></h1>
       <div class="px-4 px-lg-0">
-  <div class="pb-5">
+    <div class="pb-5">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
@@ -30,4 +32,13 @@
             <button id="clearBtn" class="btn btn-primary">Clear Cart</button><br><br>
         </div>
     </body>
+    <script>
+            $(document).ready(function() {
+                $("#clearBtn").on("click", function(){
+                    
+                    location.href = "/clearCart"; //redirects to admin route
+                    
+                });//click
+            }); //document.ready
+        </script>
 </html>
