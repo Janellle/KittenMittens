@@ -11,9 +11,12 @@ app.use(session({ secret: 'any word', cookie: { maxAge: 60000 }}));
 
 app.get("/", async function(req, res){
     let prodList = await getProdList(); 
-    insertToCart(req.body.prodName, req.body.prodPrice);
     res.render("index", {"prodList":prodList});  
 });//root
+
+app.get("/productPage", async function(req, res){
+    res.render("productPage");
+});
 
 app.get("/login", async function(req, res){
     res.render("login");
@@ -45,7 +48,6 @@ app.post("/addToCart", async function(req, res){
     insertToCart(req.body.prodName, req.body.prodPrice);
     res.send(true);
 }); // results
-
 
 app.get("/admin", async function(req, res){
     
