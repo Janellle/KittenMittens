@@ -374,10 +374,10 @@ function clearCart(){
 function dbConnection(){
 
    let conn = mysql.createConnection({
-                 host: "cst336db.space",
-                 user: "cst336_dbUser34",
-             password: "r8gttw",
-             database: "cst336_db34"
+                 host: "us-cdbr-iron-east-01.cleardb.net",
+                 user: "b7e06ef97d1c7b",
+             password: "08496ced",
+             database: "heroku_eeffc7f196aa5e6"
        });
 
 return conn;
