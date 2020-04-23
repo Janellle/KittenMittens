@@ -10,8 +10,13 @@ app.use(express.urlencoded()); //use to parse data sent using the POST method
 app.use(session({ secret: 'any word', cookie: { maxAge: 60000 }}));
 
 app.get("/", async function(req, res){
-    res.render("index");
+    let prodList = await getProdList();  
+    res.render("index", {"prodList":prodList});
 });//root
+
+app.get("/productPage", async function(req, res){
+    res.render("productPage");
+});
 
 app.get("/login", async function(req, res){
     res.render("login");
@@ -269,7 +274,7 @@ function getProdList(){
            if (err) throw err;
            console.log("Connected!");
         
-           let sql = `SELECT name
+           let sql = `SELECT *
                         FROM inventory
                         ORDER BY name`;
         
