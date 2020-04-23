@@ -1,8 +1,8 @@
-
 const express = require("express");
 const mysql   = require("mysql");
 const app = express();
 const session = require('express-session');
+
 
 app.set("view engine", "ejs");
 app.use(express.static("public")); //folder for images, css, js
@@ -18,7 +18,11 @@ app.get("/productPage", async function(req, res){
     res.render("productPage");
 });
 
-app.get("/login", async function(req, res){
+app.get("/productView", async function(req, res){
+    res.render("productView");
+});
+
+app.get("/login", function(req, res){
     res.render("login");
     
 }); // login
@@ -30,6 +34,22 @@ app.get("/search", async function(req, res){
 app.get("/cart", async function(req, res){
     let rows = await getCartProd();
     res.render("cart", {"cartProds":rows});
+}); // cart
+
+app.get("/signUp", async function(req, res){
+   res.render("signUp"); 
+}); // sign up
+
+app.post("/signUp", async function(req, res){
+  let rows = await addAcc(req.body);
+  console.log(rows);
+  
+  let message = "Account was not created!";
+  if (rows.affectedRows > 0) {
+      message = "Account successfully created!";
+  }
+  res.render("login", {"message":message});
+    
 });
 
 app.get("/clearCart", async function(req, res){
@@ -57,7 +77,7 @@ app.get("/admin", async function(req, res){
    if (req.session.authenticated) { //if user hasn't authenticated, sending them to login screen
        
      let prodList = await getProdList();  
-       res.render("admin", {"prodList":prodList});  
+     res.render("admin", {"prodList":prodList});  
        
    }  else { 
     
@@ -66,14 +86,50 @@ app.get("/admin", async function(req, res){
    }
 });
 
-app.post("/loginProcess", function(req, res) {
-    if ( req.body.username == "admin" && req.body.password == "password") {
+app.post("/loginProcess", async function(req, res) {
+    
+    let users = await getUsers();
+    var validAcc = false;
+    var validPass = false;
+    var isAdmin = false;
+    
+    for (var i = 0; i < users.length; i++) {
+
+        if (req.body.username == users[i].username) {
+            validAcc = true;
+        }
+        
+        if (validAcc) {
+            if (req.body.password == users[i].password){
+                validPass = true;
+                if (users[i].admin == 1) {
+                    isAdmin = true;
+                }
+                break;
+                
+            }
+        }
+    }
+    
+    //console.log(isAdmin, validAcc, validPass);
+    
+    if (validAcc && validPass) {
+        req.session.authenticated = true;
+        res.send({"loginSuccess":true, "admin":isAdmin});
+       
+       
+    } else {
+       res.send(false);
+    }
+    
+    
+/*    if ( req.body.username == "admin" && req.body.password == "password") {
        req.session.authenticated = true;
        res.send({"loginSuccess":true});
     } 
     else {
        res.send(false);
-    }
+    }*/
 
     
 }); // loginProcess
@@ -136,6 +192,51 @@ app.get("/deleteProd", async function(req, res){
 
 
 // functions //
+
+function addAcc(body){
+   
+   let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `INSERT INTO users
+                        (firstname, lastname, username, email, password)
+                         VALUES (?,?,?,?,?)`;
+        
+           let params = [body.firstname, body.lastname, body.username, body.email, body.password];
+        
+           conn.query(sql, params, function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows);
+           });
+        
+        });//connect
+    });//promise 
+} // addAcc
+
+function getUsers() {
+    
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `SELECT * FROM users`;
+           conn.query(sql, function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows);
+           });
+        
+        }); //connect
+    }); //promise
+}
 
 function insertProd(body){
    
