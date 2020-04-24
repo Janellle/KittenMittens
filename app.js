@@ -22,6 +22,10 @@ app.get("/productView", async function(req, res){
     res.render("productView");
 });
 
+app.get("/orders", async function(req, res){
+    res.render("orders");
+});
+
 app.get("/login", function(req, res){
     res.render("login");
     
