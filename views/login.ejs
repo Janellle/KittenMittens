@@ -5,7 +5,7 @@
             <div id="login-row" class="row justify-content-center align-items-center">
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12">
-                        <form id="login-form" class="form" action="" method="post">
+<!--                        <form id="login-form" class="form" action="" method="post">-->
                             <h3 class="text-center text-info">Login</h3>
                             <div class="text-center">
                                 <div class="form-group">
@@ -17,18 +17,19 @@
                                     <input type="password" name="password" id="password" class="form-control">
                                 </div>
                                 <button class="btn btn-primary" id="loginBtn">Login!</button>
+                                
                                 <!--Going to be used for Part 3-->
-                                <!--<div id="register-link" class="text-right">-->
-                                <!--    <a href="#" class="text-info">Register here </a>-->
-                                <!--</div>-->
-                        </form>
+                                <div id="register-link" class="text-right">
+                                <a href="/signup" class="text-info">Register here </a>
+                                </div>
+<!--                        </form>-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
-    </body>
+<!--</body>
+    </body>-->
     <script>
                 $(document).ready(function() {
                 
@@ -46,13 +47,16 @@
                                         "password":$("#password").val() },
                              success: function(result,status) {
                                 //alert(result);
-                                if (!result) {
-                                    
+                                if (!result.loginSuccess) {
                                     alert("Wrong credentials!");
                                     
                                 } else {
-                                    
-                                    location.href = "/admin"; //redirects to admin route
+                                    if (result.admin) {
+                                        location.href = "/admin"; //redirects to admin route
+                                    }
+                                    else {
+                                        location.href = "/search"; // redirects to search route
+                                    }
                                     
                                 }
                             }
@@ -64,4 +68,9 @@
                 }); //document.ready
         
         </script>
+<<<<<<< HEAD
 </html>
+=======
+        </body>
+</html>
+>>>>>>> origin/Janelle
