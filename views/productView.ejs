@@ -1,6 +1,7 @@
 <%- include('partials/header.ejs') %>
 <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <style>
                 .checked {
                   color: orange;
@@ -10,28 +11,40 @@
         <div class="card mb-3">
         <div class="row no-gutters">
         <div class="col-md-4">
-        <img src="https://images.footlocker.com/is/image/EBFL2/T3745163_a1?wid=500&amp;hei=500&amp;fmt=png-alpha">
+        <img src="<%=product.image%>"width=480 height=480>
         </div>
         <div class="col-md-8">
         <div class="card-body">
-        <h2 class="card-title">Jordan AJ 1</h2>
-        <h3 class="card-text">$49.99</h3>
+        <h2 class="card-title"><%= product.name %></h2>
+        <h3 class="card-text">$<%= product.price %>.00</h3>
         <p class="card-text text-danger">Only 5 left in stock!</p>
+        
+        <h4>Description</h4>
+
+        <%= product.description %>
+        
         <button type="button" class="btn btn-primary btn-lg btn-block">Add to Cart</button>
         </div>
         </div>
         </div>
         </div>
-        <h3>Reviews 
-        <span class="fa fa-star checked"></span>
+        
+        
+        <div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link">Reviews (2)  <span class="fa fa-star checked"></span>
         <span class="fa fa-star checked"></span>
         <span class="fa fa-star checked"></span>
         <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        (2)</h3><br>
-        <div class = "reviews">
-                
-                <b>CatLover</b>         I love this shoe!
+        <span class="fa fa-star"></span></a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <p class="card-text" align="left">
+      <b>CatLover</b>         I love this shoe!
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
@@ -45,7 +58,10 @@
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star"></span>
                 <span class="fa fa-star"></span><br><br>
-        </div>
+      
+    </p>
+  </div>
+</div>
         
     </body>
 </html>

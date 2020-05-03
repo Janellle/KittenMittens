@@ -73,13 +73,15 @@
           <% prodList.forEach(function(product){  %>
            <div class="col-lg-4 col-md-6 mb-4">
              <div class="card h-100">
+     
               <td><img class="rounded" src="<%=product.image%>" width="200px"/></td> <br>
               <div class="card-body">
                 <h4 class="card-title">
-                <%= product.name %> <br>
+                
+                <a href="/productView?name=<%= product.name %>"><%= product.name %> </a><br>
                 </h4>
                 <h5>
-                  Price: $<%= product.price %> <br>
+                  Price: $<%= product.price %>.00 <br>
                 </h5>
                 <td class="align-middle"><button class="btn btn-primary" onclick="insertToCart('<%=product.name%>','<%=product.price%>')">Add to Cart</button></td>
               </div>

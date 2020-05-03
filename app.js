@@ -15,12 +15,16 @@ app.get("/", async function(req, res){
 });//root
 
 app.get("/productPage", async function(req, res){
-    res.render("productPage");
+    let prodReviews = await getReviews();
+    res.render("productPage", {"prodReviews":prodReviews});
 });
 
 app.get("/productView", async function(req, res){
-    res.render("productView");
+    let product = await getProdInfo(req.query.name);
+    let prodReviews = await getReviews(req.query.name);
+    res.render("productView", {"prodReviews":prodReviews, "product":product});
 });
+
 
 app.get("/orders", async function(req, res){
     res.render("orders");
@@ -417,6 +421,32 @@ function getProds(query){
               conn.end();
               resolve(rows);
            });
+        
+        });//connect
+    });//promise
+    
+}
+
+function getReviews(name){
+    
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+            
+            let params = [];
+            
+           let sql = `SELECT * FROM reviews NATURAL JOIN inventory WHERE prodName = ?`;
+        
+           console.log("SQL:", sql);
+           conn.query(sql, [name], function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows[0]); //Query returns only ONE record
+           });
+        
         
         });//connect
     });//promise
