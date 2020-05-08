@@ -7,12 +7,20 @@ const session = require('express-session');
 app.set("view engine", "ejs");
 app.use(express.static("public")); //folder for images, css, js
 app.use(express.urlencoded()); //use to parse data sent using the POST method
-app.use(session({ secret: 'any word', cookie: { maxAge: 60000 }}));
+app.use(session({ secret: 'any word', cookie: { maxAge: 1000 * 60 * 5 }}));
+app.use(function(req, res, next) {
+   res.locals.isAuthenticated = req.session.authenticated; 
+   next();
+});
 
 app.get("/", async function(req, res){
-    let prodList = await getProdList();  
+    if (req.isAuthenticated) {
+        console.log("AUTHENTICATED!");
+    }
+    let prodList = await getProdList();
     res.render("index", {"prodList":prodList});
 });//root
+
 
 app.get("/productPage", async function(req, res){
     res.render("productPage");
@@ -31,7 +39,7 @@ app.get("/search", async function(req, res){
     res.render("search");
 }); // search
 
-app.get("/cart", async function(req, res){
+app.get("/cart", isAuthenticated, async function(req, res){
     let rows = await getCartProd();
     res.render("cart", {"cartProds":rows});
 }); // cart
@@ -52,7 +60,7 @@ app.post("/signUp", async function(req, res){
     
 });
 
-app.get("/clearCart", async function(req, res){
+app.get("/clearCart", isAuthenticated, async function(req, res){
     clearCart();
     let rows = await getCartProd();
     res.render("cart", {"cartProds":rows});
@@ -70,7 +78,7 @@ app.post("/addToCart", async function(req, res){
 }); // results
 
 
-app.get("/admin", async function(req, res){
+app.get("/admin", isAuthenticated, async function(req, res){
     
    console.log("authenticated: ", req.session.authenticated);    
    
@@ -115,6 +123,7 @@ app.post("/loginProcess", async function(req, res) {
     
     if (validAcc && validPass) {
         req.session.authenticated = true;
+        req.session.user = users[i].id;
         res.send({"loginSuccess":true, "admin":isAdmin});
        
        
@@ -134,13 +143,29 @@ app.post("/loginProcess", async function(req, res) {
     
 }); // loginProcess
 
+app.get("/profile", isAuthenticated, async function(req, res) {
+    var userID = req.session.user;
+    var user = await getUsersByID(userID);
+    console.log(user[0]);
+    let uFistName = user[0].firstname;
+    let uEmail = user[0].email;
+    let uUsername = user[0].username;
+    let uNumberOfPurchases = user[0].purchases;
+    res.render("profile", {"firstname":uFistName,
+                           "email":uEmail,
+                           "numberOfPurchases":uNumberOfPurchases,
+                           "username":uUsername
+    });
+});
+
 app.get("/logout", async function(req, res){    
     if (req.session) {
+        req.session.destroy();
         res.render("login");
   }
 }); // logout
 
-app.get("/addProd", function(req, res){
+app.get("/addProd", isAuthenticated, function(req, res){
   res.render("newProd");
 });
 
@@ -156,7 +181,7 @@ app.post("/addProd", async function(req, res){
     
 });
 
-app.get("/updateProd", async function(req, res){
+app.get("/updateProd", isAuthenticated, async function(req, res){
 
   let prodInfo = await getProdInfo(req.query.name);    
   res.render("updateProd", {"prodInfo":prodInfo});
@@ -176,7 +201,7 @@ app.post("/updateProd", async function(req, res){
     
 });
 
-app.get("/deleteProd", async function(req, res){
+app.get("/deleteProd", isAuthenticated, async function(req, res){
  let rows = await deleteProd(req.query.name);
  console.log(rows);
   let message = "Product WAS NOT deleted!";
@@ -192,7 +217,6 @@ app.get("/deleteProd", async function(req, res){
 
 
 // functions //
-
 function addAcc(body){
    
    let conn = dbConnection();
@@ -229,6 +253,26 @@ function getUsers() {
         
            let sql = `SELECT * FROM users`;
            conn.query(sql, function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows);
+           });
+        
+        }); //connect
+    }); //promise
+}
+
+function getUsersByID(userID) {
+    
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+            let stmt = 'SELECT * FROM users WHERE id=' + String(userID);
+            console.log(stmt);
+           conn.query(stmt, function (err, rows, fields) {
               if (err) throw err;
               conn.end();
               resolve(rows);
@@ -470,6 +514,11 @@ function clearCart(){
         });//connect
     });//promise
     
+}
+
+function isAuthenticated(req, res, next){
+    if(!req.session.authenticated) res.redirect('/login');
+    else next();
 }
 
 function dbConnection(){
