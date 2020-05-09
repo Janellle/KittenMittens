@@ -39,18 +39,7 @@ app.get("/search", async function(req, res){
     res.render("search");
 }); // search
 
-<<<<<<< HEAD
-app.get("/profile", function(req, res){
-    //res.render("profile");
-    res.render("profile", {
-        user:req.user
-    });
-}); // profile
-
-app.get("/cart", async function(req, res){
-=======
 app.get("/cart", isAuthenticated, async function(req, res){
->>>>>>> 5d25cb7a35e7cd08148fd1f9d033b5a0daaad0aa
     let rows = await getCartProd();
     res.render("cart", {"cartProds":rows});
 }); // cart
