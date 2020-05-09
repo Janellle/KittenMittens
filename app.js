@@ -201,6 +201,26 @@ app.post("/updateProd", async function(req, res){
     
 });
 
+app.get("/updateProf", isAuthenticated, async function(req, res){
+
+  let profInfo = await getProfInfo(req.query.username);    
+  res.render("updateProf", {"profInfo":profInfo});
+});
+
+app.post("/updateProf", async function(req, res){
+  let rows = await updateProf(req.body);
+  
+  let profInfo = req.body;
+  console.log(rows);
+
+  let message = "Profile WAS NOT updated!";
+  if (rows.affectedRows > 0) {
+      message= "Profile successfully updated!";
+  }
+  res.render("updateProf", {"message":message, "profInfo":profInfo});
+    
+});
+
 app.get("/deleteProd", isAuthenticated, async function(req, res){
  let rows = await deleteProd(req.query.name);
  console.log(rows);
@@ -281,6 +301,63 @@ function getUsersByID(userID) {
         }); //connect
     }); //promise
 }
+
+function updateProf(body){
+   
+   let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `UPDATE users
+                      SET picture = ?, 
+                      email = ?, 
+                      password = ?
+                      
+                      WHERE username = ?`;
+        
+           let params = [body.picture, body.email, body.password, body.username];
+        
+           console.log(sql);
+           
+           conn.query(sql, params, function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows);
+           });
+        
+        });//connect
+    });//promise 
+} // updateProfile
+
+
+function getProfInfo(username){
+   
+   let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `SELECT * 
+                      FROM users
+                      WHERE username = ?`;
+        
+           conn.query(sql, [username], function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows[0]); //Query returns only ONE record
+           });
+        
+        });//connect
+    });//promise 
+} // getProfInfo
+
+
+//----------------------product functions---------------------------//
 
 function insertProd(body){
    
@@ -409,6 +486,10 @@ function getProdInfo(name){
         });//connect
     });//promise 
 } // getProdInfo
+
+
+
+
 
 function getProdList(){
    
