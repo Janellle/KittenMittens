@@ -31,6 +31,13 @@ app.get("/search", async function(req, res){
     res.render("search");
 }); // search
 
+app.get("/profile", function(req, res){
+    //res.render("profile");
+    res.render("profile", {
+        user:req.user
+    });
+}); // profile
+
 app.get("/cart", async function(req, res){
     let rows = await getCartProd();
     res.render("cart", {"cartProds":rows});
@@ -129,7 +136,7 @@ app.post("/loginProcess", async function(req, res) {
     } 
     else {
        res.send(false);
-    }*/
+    } // old code */
 
     
 }); // loginProcess
