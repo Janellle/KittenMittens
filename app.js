@@ -93,7 +93,7 @@ app.get("/addReview", async function(req, res){
 }); // results
 
 app.post("/addReview", async function(req, res){
-    insertReview(req.body.prodname, req.body.rating, req.body.username, req.body.review);
+    insertReview(req.body.name, req.body.rating, req.body.username, req.body.review);
     res.send(true);
 }); // results
 
@@ -200,12 +200,7 @@ app.post("/addProd", async function(req, res){
     
 });
 
-<<<<<<< HEAD
 app.get("/updateProd", isAuthenticated, async function(req, res){
-=======
-
-app.get("/updateProd", async function(req, res){
->>>>>>> 77a1849a414f9df368053a55bdba5913c603b5ea
 
   let prodInfo = await getProdInfo(req.query.name);    
   res.render("updateProd", {"prodInfo":prodInfo});
@@ -502,7 +497,7 @@ function insertToCart(name, price){
     });//promise 
 }
 
-function insertReview(prodname, rating, username, review){
+function insertReview(name, rating, username, review){
    
    let conn = dbConnection();
     
@@ -512,10 +507,10 @@ function insertReview(prodname, rating, username, review){
            console.log("Connected!");
         
            let sql = `INSERT INTO reviews
-                        (prodname, rating, username, review)
+                        (name, rating, username, review)
                          VALUES (?,?,?,?)`;
         
-           let params = [prodname, rating, username, review];
+           let params = [name, rating, username, review];
         
            conn.query(sql, params, function (err, rows, fields) {
               if (err) throw err;
@@ -619,7 +614,7 @@ function getReviews(name){
             
             let params = [];
             
-           let sql = `SELECT * FROM reviews NATURAL JOIN inventory WHERE prodName = ?`;
+           let sql = `SELECT * FROM reviews NATURAL JOIN inventory WHERE name = ?`;
         
            console.log("SQL:", sql);
            conn.query(sql, [name], function (err, rows, fields) {
