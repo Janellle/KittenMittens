@@ -30,6 +30,7 @@
         <br>
         <div class="text-center">
             <button id="clearBtn" class="btn btn-primary">Clear Cart</button><br><br>
+            <button id="checkout" class="btn btn-primary">Checkout Cart</button><br><br>
         </div>
     </body>
     <script>
@@ -37,6 +38,14 @@
                 $("#clearBtn").on("click", function(){
                     
                     location.href = "/clearCart"; //redirects to admin route
+                    
+                });//click
+            }); //document.ready
+            
+             $(document).ready(function() {
+                $("#checkout").on("click", function(){
+                    
+                    alert("Checkout successful");
                     
                 });//click
             }); //document.ready

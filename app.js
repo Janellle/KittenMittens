@@ -23,11 +23,20 @@ app.get("/", async function(req, res){
 
 
 app.get("/productPage", async function(req, res){
-    res.render("productPage");
+    let prodReviews = await getReviews();
+    res.render("productPage", {"prodReviews":prodReviews});
 });
 
 app.get("/productView", async function(req, res){
-    res.render("productView");
+    let product = await getProdInfo(req.query.name);
+    let prodReviews = await getReviews(req.query.name);
+    res.render("productView", {"prodReviews":prodReviews, "product":product});
+});
+
+
+app.get("/orders", async function(req, res){
+    let orders = await getTransactions(req.query.username);
+    res.render("orders", {"orders":orders});
 });
 
 app.get("/login", function(req, res){
@@ -77,6 +86,16 @@ app.post("/addToCart", async function(req, res){
     res.send(true);
 }); // results
 
+app.get("/addReview", async function(req, res){
+    let product = await getProdInfo(req.query.name);
+    let prodReviews = await getReviews(req.query.name);
+    res.render("productView", {"prodReviews":prodReviews, "product":product});
+}); // results
+
+app.post("/addReview", async function(req, res){
+    insertReview(req.body.prodname, req.body.rating, req.body.username, req.body.review);
+    res.send(true);
+}); // results
 
 app.get("/admin", isAuthenticated, async function(req, res){
     
@@ -181,7 +200,12 @@ app.post("/addProd", async function(req, res){
     
 });
 
+<<<<<<< HEAD
 app.get("/updateProd", isAuthenticated, async function(req, res){
+=======
+
+app.get("/updateProd", async function(req, res){
+>>>>>>> 77a1849a414f9df368053a55bdba5913c603b5ea
 
   let prodInfo = await getProdInfo(req.query.name);    
   res.render("updateProd", {"prodInfo":prodInfo});
@@ -478,6 +502,31 @@ function insertToCart(name, price){
     });//promise 
 }
 
+function insertReview(prodname, rating, username, review){
+   
+   let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `INSERT INTO reviews
+                        (prodname, rating, username, review)
+                         VALUES (?,?,?,?)`;
+        
+           let params = [prodname, rating, username, review];
+        
+           conn.query(sql, params, function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows);
+           });
+        
+        });//connect
+    });//promise 
+}
+
 function getProdInfo(name){
    
    let conn = dbConnection();
@@ -553,6 +602,58 @@ function getProds(query){
               conn.end();
               resolve(rows);
            });
+        
+        });//connect
+    });//promise
+    
+}
+
+function getReviews(name){
+    
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+            
+            let params = [];
+            
+           let sql = `SELECT * FROM reviews NATURAL JOIN inventory WHERE prodName = ?`;
+        
+           console.log("SQL:", sql);
+           conn.query(sql, [name], function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows[0]); //Query returns only ONE record
+           });
+        
+        
+        });//connect
+    });//promise
+    
+}
+
+function getTransactions(username){
+    
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+            
+            let params = [];
+            
+           let sql = `SELECT * FROM transactions WHERE id = ?`;
+        
+           console.log("SQL:", sql);
+           conn.query(sql, [username], function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows[0]); //Query returns only ONE record
+           });
+        
         
         });//connect
     });//promise
