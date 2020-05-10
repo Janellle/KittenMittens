@@ -1,0 +1,22 @@
+<%- include('partials/header.ejs') %>
+<h1>Past Transactions</h1>
+    <div class="row">
+        <% transactionsList.forEach(function(transactions){ %>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <td><img class="rounded" src="<%=transactions.productPicture%>" width="200px"/></td> <br>
+                <div class="card-body">
+                <h4 class="card-title">
+                    <a href='product/<%=transactions.productId%>'> <%= transactions.productName %> </a>
+                </h4>
+                <h5>
+                    <%=transactions.id%> <br>
+                    <%=transactions.date%> <br>
+                    <%=transactions.total%> 
+                </h5 >
+                </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</body>

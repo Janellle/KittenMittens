@@ -1,0 +1,23 @@
+<%- include('partials/header.ejs') %>
+        <h1 class="text-center display-3"><strong><i> Updating Profile </i></strong></h1>
+        
+        <br>
+        <form method="POST">
+            <input type="hidden" name="name" value="<%= profInfo.username %>">
+            First Name: <%= profInfo.firstname %> (Non-changable)<br>    
+                        
+            username: <input type="text" name="username" value="<%= profInfo.username %>"><br>
+            Profile Picture URL: <input type="text" name="picture"  value="<%= profInfo.picture %>"><br>
+            Email: <input type="text" name="email"  value="<%= profInfo.email %>"><br>
+            Password: <input type="text" name="password"  value="<%= profInfo.password %>"><br>
+            
+            <br><br>
+            <button class="btn btn-primary">Update Profile</button><br>
+        
+            <%= typeof(message) != "undefined"?message:"" %>
+            
+        </form>        
+
+        <br><br>
+    </body>
+</html>

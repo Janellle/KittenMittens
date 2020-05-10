@@ -23,11 +23,20 @@ app.get("/", async function(req, res){
 
 
 app.get("/productPage", async function(req, res){
-    res.render("productPage");
+    let prodReviews = await getReviews();
+    res.render("productPage", {"prodReviews":prodReviews});
 });
 
 app.get("/productView", async function(req, res){
-    res.render("productView");
+    let product = await getProdInfo(req.query.name);
+    let prodReviews = await getReviews(req.query.name);
+    res.render("productView", {"prodReviews":prodReviews, "product":product});
+});
+
+
+app.get("/orders", async function(req, res){
+    let orders = await getTransactions(req.query.username);
+    res.render("orders", {"orders":orders});
 });
 
 app.get("/login", function(req, res){
@@ -60,11 +69,18 @@ app.post("/signUp", async function(req, res){
     
 });
 
-app.get("/clearCart", isAuthenticated, async function(req, res){
+/*app.get("/clearCart", isAuthenticated, async function(req, res){
     clearCart();
-    let rows = await getCartProd();
+    let rows = await getCartProd();    
+    res.render("cart", {"cartProds":rows});
+});*/
+
+app.get("/clearCart", async function(req, res){
+    clearCart();
+    let rows = await getCartProd();    
     res.render("cart", {"cartProds":rows});
 });
+
 
 app.get("/results", async function(req, res){
     let rows = await getProds(req.query);
@@ -77,6 +93,21 @@ app.post("/addToCart", async function(req, res){
     res.send(true);
 }); // results
 
+app.get("/getReview", async function(req, res){
+    let product = await getProdInfo(req.query.prodName);
+    let prodReviews = await getReviews(req.query.prodName);
+    res.render("productView", {"prodReviews":prodReviews, "product":product});
+}); // results
+
+app.get("/transactions", async function(req, res){
+    let transactionsList = await getTransactions();
+    res.render("transactions", {"transactionsList": transactionsList});
+});
+
+app.post("/addReview", async function(req, res){
+    insertReview(req.body.prodName, req.body.rating, req.body.username, req.body.review);
+    res.send(true);
+}); // results
 
 app.get("/admin", isAuthenticated, async function(req, res){
     
@@ -201,6 +232,26 @@ app.post("/updateProd", async function(req, res){
     
 });
 
+app.get("/updateProf", isAuthenticated, async function(req, res){
+
+  let profInfo = await getProfInfo(req.query.username);    
+  res.render("updateProf", {"profInfo":profInfo});
+});
+
+app.post("/updateProf", async function(req, res){
+  let rows = await updateProf(req.body);
+  
+  let profInfo = req.body;
+  console.log(rows);
+
+  let message = "Profile WAS NOT updated!";
+  if (rows.affectedRows > 0) {
+      message= "Profile successfully updated!";
+  }
+  res.render("updateProf", {"message":message, "profInfo":profInfo});
+    
+});
+
 app.get("/deleteProd", isAuthenticated, async function(req, res){
  let rows = await deleteProd(req.query.name);
  console.log(rows);
@@ -217,6 +268,17 @@ app.get("/deleteProd", isAuthenticated, async function(req, res){
 
 
 // functions //
+
+
+//-----------------------reviews-------------------------///
+
+
+//-----------------------reviews-------------------------///
+
+
+
+
+
 function addAcc(body){
    
    let conn = dbConnection();
@@ -281,6 +343,63 @@ function getUsersByID(userID) {
         }); //connect
     }); //promise
 }
+
+function updateProf(body){
+   
+   let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `UPDATE users
+                      SET picture = ?, 
+                      email = ?, 
+                      password = ?
+                      
+                      WHERE username = ?`;
+        
+           let params = [body.picture, body.email, body.password, body.username];
+        
+           console.log(sql);
+           
+           conn.query(sql, params, function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows);
+           });
+        
+        });//connect
+    });//promise 
+} // updateProfile
+
+
+function getProfInfo(username){
+   
+   let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `SELECT * 
+                      FROM users
+                      WHERE username = ?`;
+        
+           conn.query(sql, [username], function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows[0]); //Query returns only ONE record
+           });
+        
+        });//connect
+    });//promise 
+} // getProfInfo
+
+
+//----------------------product functions---------------------------//
 
 function insertProd(body){
    
@@ -387,6 +506,31 @@ function insertToCart(name, price){
     });//promise 
 }
 
+function insertReview(name, rating, username, review){
+   
+   let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `INSERT INTO reviews
+                        (name, rating, username, review)
+                         VALUES (?,?,?,?)`;
+        
+           let params = [name, rating, username, review];
+        
+           conn.query(sql, params, function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows);
+           });
+        
+        });//connect
+    });//promise 
+}
+
 function getProdInfo(name){
    
    let conn = dbConnection();
@@ -409,6 +553,10 @@ function getProdInfo(name){
         });//connect
     });//promise 
 } // getProdInfo
+
+
+
+
 
 function getProdList(){
    
@@ -433,6 +581,23 @@ function getProdList(){
     });//promise 
 }
 
+function getTransactions(){
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+       conn.connect(function(err){
+           if (err) throw err;
+           console.log("Connected!");
+           
+           let sql = 'SELECT * FROM transactions NATURAL JOIN inventory NATURAL JOIN users ORDER BY id';
+           conn.query(sql, function (err, rows, fields){
+               if (err) throw err;
+               conn.end();
+               resolve(rows);
+           });
+       });
+    });
+}
 
 function getProds(query){
     
@@ -463,6 +628,58 @@ function getProds(query){
     });//promise
     
 }
+
+function getReviews(name){
+    
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+            
+            let params = [];
+            
+           let sql = `SELECT * FROM reviews NATURAL JOIN inventory WHERE name = ?`;
+        
+           console.log("SQL:", sql);
+           conn.query(sql, [name], function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows[0]); //Query returns only ONE record
+           });
+        
+        
+        });//connect
+    });//promise
+    
+}
+
+/*function getTransactions(username){
+    
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+            
+            let params = [];
+            
+           let sql = `SELECT * FROM transactions WHERE id = ?`;
+        
+           console.log("SQL:", sql);
+           conn.query(sql, [username], function (err, rows, fields) {
+              if (err) throw err;
+              conn.end();
+              resolve(rows[0]); //Query returns only ONE record
+           });
+        
+        
+        });//connect
+    });//promise
+    
+}*/
 
 
 function getCartProd(){
