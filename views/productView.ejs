@@ -23,9 +23,7 @@
                       method: "POST",
                          url: "/addReview",
                     dataType: "JSON",
-                        data: { "prodname":prodname,
-                                "rating":rating,
-                                "username":username,
+                        data: { "prodName":name,
                                 "review":review
                                 
                         },
@@ -142,7 +140,7 @@
           
           
               <input type="text" class="review" name="review"><br><br>
-              <td class="align-middle"><button class="btn btn-primary" onclick="insertReview('<%=product.name%>', countStars(), 'maryann', document.getElementById('review').value )">Publish</button></td>
+              <td class="align-middle"><button class="btn btn-primary" onclick="insertReview('<%=product.name%>', document.getElementById('review').value )">Publish</button></td>
               <div class="stars">                                                                                                             
           
         </div></form>

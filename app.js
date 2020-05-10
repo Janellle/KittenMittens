@@ -69,11 +69,18 @@ app.post("/signUp", async function(req, res){
     
 });
 
-app.get("/clearCart", isAuthenticated, async function(req, res){
+/*app.get("/clearCart", isAuthenticated, async function(req, res){
     clearCart();
-    let rows = await getCartProd();
+    let rows = await getCartProd();    
+    res.render("cart", {"cartProds":rows});
+});*/
+
+app.get("/clearCart", async function(req, res){
+    clearCart();
+    let rows = await getCartProd();    
     res.render("cart", {"cartProds":rows});
 });
+
 
 app.get("/results", async function(req, res){
     let rows = await getProds(req.query);
@@ -86,21 +93,19 @@ app.post("/addToCart", async function(req, res){
     res.send(true);
 }); // results
 
-<<<<<<< HEAD
-app.get("/addReview", async function(req, res){
-    let product = await getProdInfo(req.query.name);
-    let prodReviews = await getReviews(req.query.name);
+app.get("/getReview", async function(req, res){
+    let product = await getProdInfo(req.query.prodName);
+    let prodReviews = await getReviews(req.query.prodName);
     res.render("productView", {"prodReviews":prodReviews, "product":product});
 }); // results
-=======
+
 app.get("/transactions", async function(req, res){
     let transactionsList = await getTransactions();
     res.render("transactions", {"transactionsList": transactionsList});
 });
->>>>>>> 716149c596c260b4b30087870e3d1df7a38de2dc
 
 app.post("/addReview", async function(req, res){
-    insertReview(req.body.name, req.body.rating, req.body.username, req.body.review);
+    insertReview(req.body.prodName, req.body.rating, req.body.username, req.body.review);
     res.send(true);
 }); // results
 
@@ -265,10 +270,7 @@ app.get("/deleteProd", isAuthenticated, async function(req, res){
 // functions //
 
 
-
 //-----------------------reviews-------------------------///
-
-
 
 
 //-----------------------reviews-------------------------///
@@ -653,7 +655,7 @@ function getReviews(name){
     
 }
 
-function getTransactions(username){
+/*function getTransactions(username){
     
     let conn = dbConnection();
     
@@ -677,7 +679,7 @@ function getTransactions(username){
         });//connect
     });//promise
     
-}
+}*/
 
 
 function getCartProd(){
