@@ -69,6 +69,10 @@ app.post("/addToCart", async function(req, res){
     res.send(true);
 }); // results
 
+app.get("/transactions", async function(req, res){
+    let transactionsList = await getTransactions();
+    res.render("transactions", {"transactionsList": transactionsList});
+});
 
 app.get("/admin", async function(req, res){
     
@@ -389,6 +393,23 @@ function getProdList(){
     });//promise 
 }
 
+function getTransactions(){
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+       conn.connect(function(err){
+           if (err) throw err;
+           console.log("Connected!");
+           
+           let sql = 'SELECT * FROM transactions NATURAL JOIN inventory NATURAL JOIN users ORDER BY id';
+           conn.query(sql, function (err, rows, fields){
+               if (err) throw err;
+               conn.end();
+               resolve(rows);
+           });
+       });
+    });
+}
 
 function getProds(query){
     
