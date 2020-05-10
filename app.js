@@ -237,6 +237,20 @@ app.get("/deleteProd", isAuthenticated, async function(req, res){
 
 
 // functions //
+
+
+
+//-----------------------reviews-------------------------///
+
+
+
+
+//-----------------------reviews-------------------------///
+
+
+
+
+
 function addAcc(body){
    
    let conn = dbConnection();
