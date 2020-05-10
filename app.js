@@ -86,11 +86,18 @@ app.post("/addToCart", async function(req, res){
     res.send(true);
 }); // results
 
+<<<<<<< HEAD
 app.get("/addReview", async function(req, res){
     let product = await getProdInfo(req.query.name);
     let prodReviews = await getReviews(req.query.name);
     res.render("productView", {"prodReviews":prodReviews, "product":product});
 }); // results
+=======
+app.get("/transactions", async function(req, res){
+    let transactionsList = await getTransactions();
+    res.render("transactions", {"transactionsList": transactionsList});
+});
+>>>>>>> 716149c596c260b4b30087870e3d1df7a38de2dc
 
 app.post("/addReview", async function(req, res){
     insertReview(req.body.name, req.body.rating, req.body.username, req.body.review);
@@ -572,6 +579,23 @@ function getProdList(){
     });//promise 
 }
 
+function getTransactions(){
+    let conn = dbConnection();
+    
+    return new Promise(function(resolve, reject){
+       conn.connect(function(err){
+           if (err) throw err;
+           console.log("Connected!");
+           
+           let sql = 'SELECT * FROM transactions NATURAL JOIN inventory NATURAL JOIN users ORDER BY id';
+           conn.query(sql, function (err, rows, fields){
+               if (err) throw err;
+               conn.end();
+               resolve(rows);
+           });
+       });
+    });
+}
 
 function getProds(query){
     
